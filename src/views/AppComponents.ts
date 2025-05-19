@@ -28,6 +28,78 @@ export default class AppComponents extends View {
               new Button({ type: ButtonType.Icon, icon: new AddIcon() }),
             ),
           ),
+          el(
+            "section",
+            el("h4", "Disabled Button"),
+            el(
+              ".button-container",
+              new Button({
+                type: ButtonType.Text,
+                title: "Text",
+                disabled: true,
+              }),
+              new Button({
+                type: ButtonType.Contained,
+                title: "Contained",
+                disabled: true,
+              }),
+              new Button({
+                type: ButtonType.Outlined,
+                title: "Outlined",
+                disabled: true,
+              }),
+              new Button({
+                type: ButtonType.Icon,
+                icon: new AddIcon(),
+                disabled: true,
+              }),
+            ),
+          ),
+          el(
+            "section",
+            el("h4", "Button with Icon"),
+            el(
+              ".button-container",
+              new Button({
+                type: ButtonType.Text,
+                title: "Text",
+                icon: new AddIcon(),
+              }),
+              new Button({
+                type: ButtonType.Contained,
+                title: "Contained",
+                icon: new AddIcon(),
+              }),
+              new Button({
+                type: ButtonType.Outlined,
+                title: "Outlined",
+                icon: new AddIcon(),
+              }),
+            ),
+          ),
+          el(
+            "section",
+            el("h4", "Loading Button"),
+            el(
+              ".button-container",
+              new Button({
+                type: ButtonType.Text,
+                title: "Text",
+              }).startLoading(),
+              new Button({
+                type: ButtonType.Contained,
+                title: "Contained",
+              }).startLoading(),
+              new Button({
+                type: ButtonType.Outlined,
+                title: "Outlined",
+              }).startLoading(),
+              new Button({
+                type: ButtonType.Icon,
+                icon: new AddIcon(),
+              }).startLoading(),
+            ),
+          ),
         ),
       ),
     );
