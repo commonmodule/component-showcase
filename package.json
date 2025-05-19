@@ -1,0 +1,16 @@
+{
+  "name": "@commonmodule/component-showcase",
+  "author": "yj.gaia",
+  "homepage": "https://personas.gaia.cc/yj.gaia",
+  "version": "0.2.5",
+  "type": "module",
+  "types": "./lib/index.d.ts",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@commonmodule/app-components": "^0.1.8",
+    "@commonmodule/wallet-utils": "^0.2.2",
+    "@wagmi/connectors": "^5.4.0",
+    "@wagmi/core": "^2.14.6"
+  },
+  "devDependencies": {}
+}
