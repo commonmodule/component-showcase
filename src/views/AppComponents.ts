@@ -1,32 +1,44 @@
 import { AppRoot, el, View } from "@commonmodule/app";
 import {
+  Accordion,
+  AccordionItem,
+  AlertDialog,
   AppCompConfig,
   Button,
   ButtonGroup,
   ButtonType,
   Checkbox,
+  ConfirmDialog,
   DropdownMenu,
   DropdownMenuGroup,
   DropdownMenuItem,
+  ErrorAlert,
+  ErrorDialog,
   FileTree,
+  ImageViewer,
+  InfoAlert,
   Input,
+  PromptDialog,
+  QuantityInputDialog,
   Select,
+  StructuredModal,
+  SuccessAlert,
   Tab,
   TabGroup,
+  WarningAlert,
 } from "@commonmodule/app-components";
+
+class CustomModal extends StructuredModal {
+  constructor() {
+    super(".custom-modal");
+    this.appendToHeader(el("h2", "Custom Modal"));
+    this.appendToMain(el("p", "This is a custom modal."));
+  }
+}
 
 export default class AppComponents extends View {
   constructor() {
     super();
-
-    AppCompConfig.updateTabBackgroundOnSelect = (tabBackground, tab) => {
-      const leftOffset = tab.htmlElement.offsetLeft;
-      const rightInset = tabBackground.calculateRect().width - leftOffset -
-        tab.calculateRect().width;
-      tabBackground.style({
-        clipPath: `inset(0px ${rightInset}px 0px ${leftOffset}px round 9999px)`,
-      });
-    };
 
     this.container = el(
       ".showcase-view.app-components-view",
@@ -285,7 +297,7 @@ export default class AppComponents extends View {
               label: "Tab 3",
               value: "tab3",
             }),
-          ).selectTab("tab2"),
+          ),
         ),
         el(
           "section",
@@ -323,9 +335,91 @@ export default class AppComponents extends View {
       el(
         "section.display",
         el("h2", "Display"),
-        el("section", el("h3", "Alert")),
-        el("section", el("h3", "Modal")),
-        el("section", el("h3", "Dialog")),
+        el(
+          "section",
+          el("h3", "Alert"),
+          new SuccessAlert("This is a success Alert."),
+          new InfoAlert("This is an info Alert."),
+          new WarningAlert("This is a warning Alert."),
+          new ErrorAlert("This is an error Alert."),
+        ),
+        el(
+          "section",
+          el("h3", "Modal"),
+          el(
+            ".button-container",
+            new Button({
+              title: "Open Modal",
+              onPress: () => new CustomModal(),
+            }),
+          ),
+        ),
+        el(
+          "section",
+          el("h3", "Dialog"),
+          el(
+            ".button-container",
+            new Button({
+              title: "Open Alert Dialog",
+              onPress: () =>
+                new AlertDialog({
+                  title: "Alert Dialog",
+                  message: "This is an alert dialog.",
+                }),
+            }),
+            new Button({
+              title: "Open Confirm Dialog",
+              onPress: () =>
+                new ConfirmDialog({
+                  title: "Confirm Dialog",
+                  message: "Are you sure you want to proceed?",
+                  onConfirm: () =>
+                    new AlertDialog({
+                      title: "Confirmed",
+                      message: "You have confirmed the action.",
+                    }),
+                }),
+            }),
+            new Button({
+              title: "Open Prompt Dialog",
+              onPress: () =>
+                new PromptDialog({
+                  title: "Prompt Dialog",
+                  message: "Please enter your name:",
+                  placeholder: "Enter name",
+                  onConfirm: (value) =>
+                    new AlertDialog({
+                      title: "Name Entered",
+                      message: `You entered: ${value}`,
+                    }),
+                }),
+            }),
+            new Button({
+              title: "Open Quantity Input Dialog",
+              onPress: () =>
+                new QuantityInputDialog({
+                  title: "Quantity Input Dialog",
+                  message: "Please enter a quantity:",
+                  min: 1,
+                  max: 10,
+                  value: 5,
+                  onConfirm: (value) =>
+                    new AlertDialog({
+                      title: "Quantity Entered",
+                      message: `You entered: ${value}`,
+                    }),
+                }),
+            }),
+            new Button({
+              title: "Open Error Dialog",
+              onPress: () =>
+                new ErrorDialog({
+                  title: "Error Dialog",
+                  message: "This is an error dialog.",
+                }),
+            }),
+          ),
+        ),
       ),
     );
 
@@ -334,8 +428,65 @@ export default class AppComponents extends View {
       el(
         "section",
         el("h2", "Miscellaneous"),
-        el("section", el("h3", "Accordion")),
-        el("section", el("h3", "Image Viewer")),
+        el(
+          "section",
+          el("h3", "Accordion"),
+          new Accordion(
+            new AccordionItem({
+              label: "Item 1",
+              open: true,
+            }, "Content for Item 1"),
+            new AccordionItem({
+              label: "Item 2",
+              open: false,
+            }, "Content for Item 2"),
+            new AccordionItem({
+              label: "Item 3",
+              open: false,
+            }, "Content for Item 3"),
+          ),
+        ),
+        el(
+          "section",
+          el("h3", "Image Viewer"),
+          el(
+            ".button-container",
+            new Button({
+              title: "Open Image Viewer",
+              onPress: () => {
+                new ImageViewer({
+                  images: [{
+                    imageUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-1.jpg",
+                    thumbnailUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-1.jpg",
+                  }, {
+                    imageUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-2.jpg",
+                    thumbnailUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-2.jpg",
+                  }, {
+                    imageUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-3.jpg",
+                    thumbnailUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-3.jpg",
+                  }, {
+                    imageUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-4.jpg",
+                    thumbnailUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-4.jpg",
+                  }, {
+                    imageUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-5.jpg",
+                    thumbnailUrl:
+                      "https://yavuzceliker.github.io/sample-images/image-5.jpg",
+                  }],
+                  initialIndex: 0,
+                });
+              },
+            }),
+          ),
+        ),
       ),
     );
   }
