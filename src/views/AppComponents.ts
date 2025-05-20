@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   ErrorAlert,
   ErrorDialog,
+  FileDropzone,
   FileTree,
   ImageViewer,
   InfoAlert,
@@ -204,7 +205,18 @@ export default class AppComponents extends View {
             checked: true,
           }),
         ),
-        el("section", el("h3", "File Dropzone")),
+        el(
+          "section",
+          el("h3", "File Dropzone"),
+          new FileDropzone({
+            onUpload: (files) => {
+              new AlertDialog({
+                title: "Files Uploaded",
+                message: `Uploaded ${files.length} files.`,
+              });
+            },
+          }, "Drag and drop files here or click to upload"),
+        ),
       ),
     );
 
