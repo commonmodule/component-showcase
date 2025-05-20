@@ -1,22 +1,39 @@
 import { AppRoot, el, View } from "@commonmodule/app";
 import {
+  AppCompConfig,
   Button,
   ButtonGroup,
   ButtonType,
   Checkbox,
+  DropdownMenu,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  FileTree,
   Input,
   Select,
+  Tab,
+  TabGroup,
 } from "@commonmodule/app-components";
-import { AddIcon } from "@commonmodule/svg-icons";
 
 export default class AppComponents extends View {
   constructor() {
     super();
+
+    AppCompConfig.updateTabBackgroundOnSelect = (tabBackground, tab) => {
+      const leftOffset = tab.htmlElement.offsetLeft;
+      const rightInset = tabBackground.calculateRect().width - leftOffset -
+        tab.calculateRect().width;
+      tabBackground.style({
+        clipPath: `inset(0px ${rightInset}px 0px ${leftOffset}px round 9999px)`,
+      });
+    };
+
     this.container = el(
       ".showcase-view.app-components-view",
       el("h1", "App Components"),
     ).appendTo(AppRoot);
 
+    // Button
     this.container.append(
       el(
         "section.button",
@@ -29,7 +46,10 @@ export default class AppComponents extends View {
             new Button({ type: ButtonType.Text, title: "Text" }),
             new Button({ type: ButtonType.Contained, title: "Contained" }),
             new Button({ type: ButtonType.Outlined, title: "Outlined" }),
-            new Button({ type: ButtonType.Icon, icon: new AddIcon() }),
+            new Button({
+              type: ButtonType.Icon,
+              icon: new AppCompConfig.DownloadIcon(),
+            }),
           ),
         ),
         el(
@@ -54,7 +74,7 @@ export default class AppComponents extends View {
             }),
             new Button({
               type: ButtonType.Icon,
-              icon: new AddIcon(),
+              icon: new AppCompConfig.DownloadIcon(),
               disabled: true,
             }),
           ),
@@ -67,17 +87,17 @@ export default class AppComponents extends View {
             new Button({
               type: ButtonType.Text,
               title: "Text",
-              icon: new AddIcon(),
+              icon: new AppCompConfig.DownloadIcon(),
             }),
             new Button({
               type: ButtonType.Contained,
               title: "Contained",
-              icon: new AddIcon(),
+              icon: new AppCompConfig.DownloadIcon(),
             }),
             new Button({
               type: ButtonType.Outlined,
               title: "Outlined",
-              icon: new AddIcon(),
+              icon: new AppCompConfig.DownloadIcon(),
             }),
           ),
         ),
@@ -100,7 +120,7 @@ export default class AppComponents extends View {
             }).startLoading(),
             new Button({
               type: ButtonType.Icon,
-              icon: new AddIcon(),
+              icon: new AppCompConfig.DownloadIcon(),
             }).startLoading(),
           ),
         ),
@@ -114,6 +134,10 @@ export default class AppComponents extends View {
           ),
         ),
       ),
+    );
+
+    // Form
+    this.container.append(
       el(
         "section.form",
         el("h2", "Form"),
@@ -142,7 +166,7 @@ export default class AppComponents extends View {
             label: "Input with Icon",
             required: true,
             placeholder: "Enter text",
-            suffixIcon: new AddIcon(),
+            suffixIcon: new AppCompConfig.DownloadIcon(),
           }),
         ),
         el(
@@ -170,13 +194,132 @@ export default class AppComponents extends View {
         ),
         el("section", el("h3", "File Dropzone")),
       ),
+    );
+
+    // Navigation
+    this.container.append(
       el(
         "section.navigation",
         el("h2", "Navigation"),
-        el("section", el("h3", "Menu")),
-        el("section", el("h3", "Tabs")),
-        el("section", el("h3", "File Tree")),
+        el(
+          "section",
+          el("h3", "Menu"),
+          el(
+            ".button-container",
+            new Button({
+              title: "Menu",
+              onPress: (button, event) => {
+                event.stopPropagation();
+
+                const rect = button.calculateRect();
+
+                const menu = new DropdownMenu({
+                  left: rect.left,
+                  top: rect.bottom,
+                });
+
+                const group = new DropdownMenuGroup();
+
+                new DropdownMenuItem({
+                  label: "Profile",
+                }).appendTo(group);
+
+                new DropdownMenuItem({
+                  label: "My account",
+                }).appendTo(group);
+
+                new DropdownMenuItem({
+                  label: "Logout",
+                }).appendTo(group);
+
+                menu.appendToMain(group);
+              },
+            }),
+            new Button({
+              title: "Menu with Icon",
+              onPress: (button, event) => {
+                event.stopPropagation();
+
+                const rect = button.calculateRect();
+
+                const menu = new DropdownMenu({
+                  left: rect.left,
+                  top: rect.bottom,
+                });
+
+                const group = new DropdownMenuGroup();
+
+                new DropdownMenuItem({
+                  icon: new AppCompConfig.SuccessIcon(),
+                  label: "Profile",
+                }).appendTo(group);
+
+                new DropdownMenuItem({
+                  icon: new AppCompConfig.WarningIcon(),
+                  label: "My account",
+                }).appendTo(group);
+
+                new DropdownMenuItem({
+                  icon: new AppCompConfig.ErrorIcon(),
+                  label: "Logout",
+                }).appendTo(group);
+
+                menu.appendToMain(group);
+              },
+            }),
+          ),
+        ),
+        el(
+          "section",
+          el("h3", "Tabs"),
+          new TabGroup(
+            new Tab({
+              label: "Tab 1",
+              value: "tab1",
+            }),
+            new Tab({
+              label: "Tab 2",
+              value: "tab2",
+            }),
+            new Tab({
+              label: "Tab 3",
+              value: "tab3",
+            }),
+          ).selectTab("tab2"),
+        ),
+        el(
+          "section",
+          el("h3", "File Tree"),
+          new FileTree([{
+            id: "1",
+            name: "Root",
+            type: "directory",
+            children: [
+              {
+                id: "2",
+                name: "Folder 1",
+                type: "directory",
+                children: [],
+              },
+              {
+                id: "3",
+                name: "Folder 2",
+                type: "directory",
+                children: [],
+              },
+              {
+                id: "4",
+                name: "File 1.txt",
+                type: "file",
+              },
+            ],
+          }]),
+        ),
       ),
+    );
+
+    // Display
+    this.container.append(
       el(
         "section.display",
         el("h2", "Display"),
@@ -184,6 +327,10 @@ export default class AppComponents extends View {
         el("section", el("h3", "Modal")),
         el("section", el("h3", "Dialog")),
       ),
+    );
+
+    // Miscellaneous
+    this.container.append(
       el(
         "section",
         el("h2", "Miscellaneous"),
