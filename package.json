@@ -9,8 +9,6 @@
   "dependencies": {
     "@commonmodule/app-components": "^0.1.8",
     "@commonmodule/markdown-editor": "^0.0.5",
-    "@commonmodule/svg-icons": "^0.0.2",
-    "@commonmodule/wallet-utils": "^0.2.2",
     "@wagmi/connectors": "^5.4.0",
     "@wagmi/core": "^2.14.6"
   },

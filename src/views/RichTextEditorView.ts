@@ -20,21 +20,26 @@ export default class RichTextEditorView extends View {
         "section.markdown-editor-section",
         el("h2", "Markdown Editor"),
         markdownEditor = new MarkdownEditor(),
-        el("h3", "Preview"),
+        el("h3", "Preview (HTML)"),
         markdownDocument = el(".markdown-document"),
       ),
       el(
         "section.rich-text-editor-section",
         el("h2", "Rich Text Editor"),
         richTextEditor = new RichTextEditor(),
-        el("h3", "Preview"),
-        richTextDocument = el(".markdown-document"),
+        el("h3", "Preview (Markdown)"),
+        richTextDocument = el(".markdown-source"),
       ),
     );
 
     markdownEditor.on("contentChanged", async (newContent: string) => {
       markdownDocument.htmlElement.innerHTML = await MarkdownConverter
         .convertMarkdownToHtml(newContent);
+    });
+
+    richTextEditor.on("contentChanged", async (newContent: string) => {
+      richTextDocument.htmlElement.innerHTML = MarkdownConverter
+        .convertHtmlToMarkdown(newContent);
     });
   }
 }
